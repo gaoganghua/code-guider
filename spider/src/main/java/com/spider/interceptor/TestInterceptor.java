@@ -12,5 +12,8 @@ public class TestInterceptor implements SpiderInterceptor {
     @Override
     public void postTask() {
         System.out.println("post task.....");
+
+
+
     }
 }
