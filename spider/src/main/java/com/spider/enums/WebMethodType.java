@@ -2,7 +2,7 @@ package com.spider.enums;
 
 import org.springframework.util.StringUtils;
 
-public enum WebMethodEnum {
+public enum WebMethodType {
     PUT("put"), DELETE("delete"), POST("post"), GET("get"), HEAD("head"), OPTIONS("options");
 
     private String value;
@@ -15,15 +15,15 @@ public enum WebMethodEnum {
         this.value = value;
     }
 
-    WebMethodEnum(String value) {
+    WebMethodType(String value) {
         this.value = value;
     }
 
-    public static WebMethodEnum parse(String method) {
+    public static WebMethodType parse(String method) {
         if (StringUtils.isEmpty(method)) {
             return GET;
         }
-        for (WebMethodEnum webMethod : values()) {
+        for (WebMethodType webMethod : values()) {
             if (webMethod.getValue().equals(method)) {
                 return webMethod;
             }

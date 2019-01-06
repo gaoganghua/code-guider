@@ -1,12 +1,14 @@
 package com.spider.bean;
 
+import com.spider.interfaces.Constants;
 import com.spider.util.IOUtils;
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.StatusLine;
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+import org.apache.http.cookie.Cookie;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 public class WebResponse {
@@ -14,11 +16,11 @@ public class WebResponse {
 
     private StatusLine statusLine;
 
-    private Cookie cookie;
+    private List<Cookie> cookie;
 
     private Map<String, String> headers;
 
-    private InputStream stream;
+    private HttpEntity entity;
 
     private String body;
 
@@ -40,11 +42,11 @@ public class WebResponse {
         this.statusLine = statusLine;
     }
 
-    public Cookie getCookie() {
+    public List<Cookie> getCookie() {
         return cookie;
     }
 
-    public void setCookie(Cookie cookie) {
+    public void setCookie(List<Cookie> cookie) {
         this.cookie = cookie;
     }
 
@@ -56,20 +58,20 @@ public class WebResponse {
         this.headers = headers;
     }
 
-    public InputStream getStream() {
-        return stream;
+    public HttpEntity getEntity() {
+        return entity;
     }
 
-    public void setStream(InputStream stream) {
-        this.stream = stream;
+    public void setEntity(HttpEntity entity) {
+        this.entity = entity;
     }
 
-    public String getBody() throws IOException {
+    public String getBody() {
         if (!StringUtils.isEmpty(body)) {
             return body;
         }
         try {
-            body = IOUtils.parseStream(this.getStream(), charset);
+            body = IOUtils.parseStream(this.entity.getContent(), Constants.DEFAULT_CHARSET);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

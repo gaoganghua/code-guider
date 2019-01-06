@@ -2,10 +2,14 @@ package com.spider.enums;
 
 import org.springframework.util.StringUtils;
 
-public enum ParamTypeEnum {
-    STRING("string"), FILE("file"), BYTEARRAY("bytearray"), INPUTSTREAM("inputstream"), MULTIPART("multipart");
+public enum ParamType {
+    STRING("string"), FILE("file"), UELENCODEFORM("urlencodeform"), BYTEARRAY("bytearray"), INPUTSTREAM("inputstream"), MULTIPART("multipart");
 
     private String value;
+
+    ParamType(String value) {
+        this.value = value;
+    }
 
     public String getValue() {
         return value;
@@ -15,15 +19,11 @@ public enum ParamTypeEnum {
         this.value = value;
     }
 
-    ParamTypeEnum(String value) {
-        this.value = value;
-    }
-
-    public static ParamTypeEnum parse(String type) {
+    public static ParamType parse(String type) {
         if (StringUtils.isEmpty(type)) {
             return STRING;
         }
-        for (ParamTypeEnum paramType : values()) {
+        for (ParamType paramType : values()) {
             if (paramType.getValue().equals(type)) {
                 return paramType;
             }

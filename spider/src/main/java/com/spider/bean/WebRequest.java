@@ -1,8 +1,8 @@
 package com.spider.bean;
 
-import com.spider.enums.ParamTypeEnum;
-import com.spider.enums.WebMethodEnum;
-import org.apache.commons.httpclient.HttpVersion;
+import com.spider.enums.ParamType;
+import com.spider.enums.WebMethodType;
+import org.apache.http.HttpVersion;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
@@ -19,15 +19,17 @@ public class WebRequest {
 
     private Map<String, Object> methodParams;
 
-    private ParamTypeEnum paramType = ParamTypeEnum.STRING;
+    private ParamType paramType = ParamType.STRING;
 
-    private WebMethodEnum method = WebMethodEnum.GET;
+    private WebMethodType method = WebMethodType.GET;
 
     private String cookie;
 
     private String charset = "UTF-8";
 
     private HttpVersion httpVersion = HttpVersion.HTTP_1_1;
+
+    private String filePath;
 
     public WebRequest() {
     }
@@ -78,11 +80,11 @@ public class WebRequest {
         this.methodParams = methodParams;
     }
 
-    public WebMethodEnum getMethod() {
+    public WebMethodType getMethod() {
         return method;
     }
 
-    public void setMethod(WebMethodEnum method) {
+    public void setMethod(WebMethodType method) {
         this.method = method;
     }
 
@@ -102,7 +104,7 @@ public class WebRequest {
         this.charset = charset;
     }
 
-    public ParamTypeEnum getParamType() {
+    public ParamType getParamType() {
         return paramType;
     }
 
@@ -110,11 +112,19 @@ public class WebRequest {
         return httpVersion;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public void setHttpVersion(HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
     }
 
-    public void setParamType(ParamTypeEnum paramType) {
+    public void setParamType(ParamType paramType) {
         this.paramType = paramType;
     }
 
