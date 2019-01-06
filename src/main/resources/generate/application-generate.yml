@@ -1,0 +1,10 @@
+generatebean:
+  generateType: list
+  className: ""
+
+template-bean:
+  assignValue:
+    - DirectJdb
+  suffixName: ManagerImpl
+  targetDir:
+    /Users/chancelee/Desktop/DEFAULT/generate
