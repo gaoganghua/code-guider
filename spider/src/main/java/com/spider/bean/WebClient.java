@@ -2,8 +2,8 @@ package com.spider.bean;
 
 import com.spider.enums.ParamType;
 import com.spider.enums.ProxyType;
+import com.spider.interceptor.BaseInterceptor;
 import com.spider.interceptor.SelftInterceptor;
-import com.spider.interceptor.TestInterceptor;
 import com.spider.util.ClientUtils;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.*;
@@ -47,9 +47,12 @@ public class WebClient {
 
     private Boolean needProxy = true;
 
-    private ResponseHandler responseHandler = new SelfResponseHandler();;
+    private ResponseHandler responseHandler = new SelfResponseHandler();
+    ;
 
     private RequestConfig.Builder configBuilder = null;
+
+    private HttpClientBuilder builder = null;
 
     private HttpClientContext webContent = null;
 
@@ -57,6 +60,7 @@ public class WebClient {
 
     private WebClient() {
         configBuilder = RequestConfig.custom();
+        builder = HttpClients.custom();
     }
 
     public static WebClient newClient() {
@@ -108,17 +112,21 @@ public class WebClient {
         return this;
     }
 
+    public WebClient buildInterceptor(BaseInterceptor interceptor) {
+        if (interceptor != null) {
+            SelftInterceptor selftInterceptor = new SelftInterceptor();
+            selftInterceptor.setSpiderInterceptor(interceptor);
+            builder.addInterceptorLast((HttpRequestInterceptor) selftInterceptor);
+            builder.addInterceptorLast((HttpResponseInterceptor) selftInterceptor);
+        }
+        return this;
+    }
+
     public WebClient init() {
-        HttpClientBuilder builder = HttpClients.custom();
+
         builder.setDefaultRequestConfig(configBuilder.build());
 //        builder.setConnectionManager();
 //        builder.setSSLContext();
-
-        SelftInterceptor interceptor = new SelftInterceptor();
-        interceptor.setSpiderInterceptor(new TestInterceptor());
-        builder.addInterceptorLast((HttpRequestInterceptor) interceptor);
-        builder.addInterceptorLast((HttpResponseInterceptor) interceptor);
-
 
         this.client = builder.build();
         return this;

@@ -1,44 +1,57 @@
 package com.spider.interceptor;
 
-import com.spider.interfaces.BaseChain;
-import com.spider.interfaces.Chain;
+import com.spider.interfaces.InterceptorChain;
 import com.spider.interfaces.SpiderInterceptor;
 
-public abstract class BaseInterceptor implements SpiderInterceptor {
-    private BaseChain preChain = new InterceptorChain();
-    private BaseChain postChain = new InterceptorChain();
-
+/**
+ * @time 2019/1/7
+ * //拦截器的基本类，自定义拦截器需要实现它
+ */
+public abstract class BaseInterceptor implements SpiderInterceptor, InterceptorChain {
+    private InterceptorChain preChain = null;
+    private InterceptorChain postChain = null;
 
     @Override
-    public void preTask() {
-        preProcess();
+    public void addPreChain(InterceptorChain preChain) {
+        this.preChain = preChain;
     }
 
     @Override
-    public void postTask() {
-        postProcess();
-        if(postChain.next()!=null){
-//            postNext().
+    public void addPostChain(InterceptorChain postChain) {
+        this.postChain = postChain;
+    }
+
+    @Override
+    public InterceptorChain preNext() {
+        return preChain;
+    }
+
+    @Override
+    public InterceptorChain postNext() {
+        return postChain;
+    }
+
+    @Override
+    public void preExecute() {
+        this.preTask();
+        if (preNext() != null) {
+            doPreChain(preNext());
         }
     }
 
-    public abstract void preProcess();
-
-    public abstract void postProcess();
-
-    public void addPreChain(Chain chain) {
-        preChain.addChain(chain);
+    @Override
+    public void postExecute() {
+        this.postTask();
+        if (postNext() != null) {
+            doPostChain(postNext());
+        }
     }
 
-    public void addPostChain(Chain chain) {
-        postChain.addChain(chain);
+    private void doPreChain(InterceptorChain chain) {
+        chain.preExecute();
     }
 
-    private Chain preNext() {
-        return preChain.next();
-    }
-
-    private Chain postNext() {
-        return postChain.next();
+    private void doPostChain(InterceptorChain chain) {
+        chain.postExecute();
     }
 }

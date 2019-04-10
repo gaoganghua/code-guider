@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.code.read.mappers.Mappers">
+	<!-- 查询 -->
+
+	<select id="huxian" resultType="com.code.read.bean.Wengzhang">
+		select * from wengzhang where
+		wid=${wid}
+	</select>
+
+	<select id="count" resultType="Integer">
+		select COUNT(*) from wengzhang
+	</select>
+
+	<select id="alls" resultType="com.code.read.bean.Wengzhang">
+		select * from wengzhang
+		<where>
+			<if test="name!=null"> biaoti like '%${name}%' </if>
+		</where>
+		limit ${p.startIndex},${p.pageSize}
+	</select>
+
+	<select id="getJx" resultType="com.code.read.bean.Jx">
+		select * from jx
+	</select>
+
+	<select id="fl" resultType="com.code.read.bean.fl">
+		select * from fenglei
+	</select>
+	<select id="getS" resultType="com.code.read.bean.City">
+		select codeid,cityname from area
+		WHERE parentid=${codeid}
+	</select>
+	<select id="getSs" resultType="com.code.read.bean.City">
+		select codeid,cityname from area
+		WHERE parentid=${codeid}
+	</select>
+	<select id="dl" resultType="com.code.read.bean.Yonghu">
+		select * from yonghu WHERE
+		youxiang='${youxiang}' and pwd='${pwd}'
+	</select>
+	<select id="wy" resultType="com.code.read.bean.Yonghu">
+		select * from yonghu WHERE
+		youxiang='${youxiang}'
+	</select>
+	<select id="wengzhang" resultType="com.code.read.bean.Wengzhang">
+		select * from wengzhang
+		<where>
+			<if test="fid !=0">fid=${fid}</if>
+			<if test="biaoti !=null"> biaoti like '%${biaoti}%' </if>
+		</where>
+		ORDER BY wid DESc
+	</select>
+	<select id="fenlei" resultType="com.code.read.bean.fl">select * from fenglei</select>
+
+	<!-- 增加 -->
+	<insert id="zc">
+		INSERT into yonghu
+		values(0,'${youxiang}','${pwd}','${yname}',${qid},1)
+	</insert>
+	<insert id="add"> insert into wengzhang
+		values(0,#{biaoti},#{leirong},#{pic},${fid},now(),now(),#{zuozhe})
+	</insert>
+
+	<insert id="add2">
+		insert into jx values(0,#{jname},#{jpic},${fid})
+	</insert>
+
+	<!-- 删除 -->
+
+	<delete id="sc"> delete from jx where jid in (${jid} )</delete>
+	<delete id="sc2"> delete from wengzhang where wid in (${wid} )
+	</delete>
+	<!-- 修改 -->
+
+	<update id="xg">
+		update wengzhang set
+		leirong=#{leirong},biaoti=#{biaoti},udate=now() where wid=${wid}
+	</update>
+
+</mapper>

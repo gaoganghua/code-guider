@@ -4,7 +4,11 @@ import com.spider.bean.WebClient;
 import com.spider.bean.WebClientOld;
 import com.spider.bean.WebRequest;
 import com.spider.bean.WebResponse;
+import com.spider.interceptor.BaseInterceptor;
 import com.spider.interfaces.Constants;
+import com.spider.test.bean.FirstInterceptor;
+import com.spider.test.bean.SecondInterceptor;
+import com.spider.test.bean.ThreeInterceptor;
 import com.spider.util.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -43,7 +47,7 @@ public class WebClientTest {
 //        System.out.println(client.execute(get));
     }
     @Test
-    public void test2() throws IOException {
+    public void testSimple() throws IOException {
         String url = "https://www.baidu.com/";
 //        url = "https://www.xicidaili.com/nn/";
         WebClient client = WebClient.newClient().init();
@@ -57,6 +61,23 @@ public class WebClientTest {
 //        System.out.println(IOUtils.parseStream(response.getEntity().getContent(), Constants.DEFAULT_CHARSET));
 //        System.out.println(response.getBody());
 //        System.out.println(response.getBody());
+    }
+    @Test
+    public void testInterceptor() throws IOException {
+        String url = "https://www.baidu.com/";
+        BaseInterceptor baseInterceptor1 = new FirstInterceptor();
+        BaseInterceptor baseInterceptor2 = new SecondInterceptor();
+        BaseInterceptor baseInterceptor3 = new ThreeInterceptor();
+        baseInterceptor1.addPreChain(baseInterceptor2);
+        baseInterceptor2.addPreChain(baseInterceptor3);
+        baseInterceptor1.addPostChain(baseInterceptor2);
+
+        WebClient client = WebClient.newClient().buildInterceptor(baseInterceptor1).init();
+
+        WebRequest request = new WebRequest();
+        request.setUrl(url);
+
+        WebResponse response = (WebResponse) client.execute(request);
     }
     public void test(){
         String url = "https://www.baidu.com/";
